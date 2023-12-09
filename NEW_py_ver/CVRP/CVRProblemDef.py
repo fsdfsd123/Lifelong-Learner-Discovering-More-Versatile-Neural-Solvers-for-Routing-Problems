@@ -1,7 +1,7 @@
 
 import torch
 import numpy as np
-
+torch.manual_seed(1)
 
 def get_random_problems(batch_size, problem_size):
     depot_xy = torch.rand(size=(batch_size, 1, 2))

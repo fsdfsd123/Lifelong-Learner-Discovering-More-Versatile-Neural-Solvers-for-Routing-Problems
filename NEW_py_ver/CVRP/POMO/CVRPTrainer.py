@@ -38,7 +38,7 @@ class CVRPTrainer:
         # result folder, logger
         self.logger = getLogger(name='trainer')
         self.result_log = LogData()
-
+        self.result_folder = get_result_folder()
         # cuda
         USE_CUDA = self.trainer_params['use_cuda']
         if USE_CUDA:

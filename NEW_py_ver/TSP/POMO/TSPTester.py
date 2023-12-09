@@ -41,12 +41,11 @@ class TSPTester:
         # ENV and MODEL
         self.env = Env(**self.env_params)
         self.model = Model(**self.model_params)
-
+        self.register_last()
         # Restore
-        model_load = tester_params['model_load']
-        checkpoint_fullname = '{path}/checkpoint-{epoch}.pt'.format(**model_load)
-        checkpoint = torch.load(checkpoint_fullname, map_location=device)
-        self.model.load_state_dict(checkpoint['model_state_dict'])
+        checkpoint_path = self.env_params['model_path']
+        checkpoint = torch.load(checkpoint_path, map_location=device)
+        self.model.load_state_dict(checkpoint)
 
         # utility
         self.time_estimator = TimeEstimator()
@@ -109,7 +108,7 @@ class TSPTester:
                 self.logger.info(" AUGMENTATION SCORE: {:.4f} ".format(aug_score_AM.avg))
                 return score_AM.avg
 
-    def _test_one_batch(self, batch_size, local_path):
+    def _test_one_batch(self, batch_size, local_path=None):
 
         # Augmentation
         ###############################################
@@ -148,3 +147,20 @@ class TSPTester:
         aug_score = -max_aug_pomo_reward.float().mean()  # negative sign to make positive value
 
         return no_aug_score.item(), aug_score.item()
+
+
+    def register_last(self):
+        # save external param as last
+        last_k = []
+        last_b = []
+        for param_name, param in self.model.encoder.layers.named_parameters():
+            if 'external_k' in param_name:
+                last_k.append(param.data.clone())
+            if 'external_b' in param_name:
+                last_b.append(param.data.clone())
+        last_k = torch.mean(torch.stack(last_k, dim=0), dim=0)
+        last_b = torch.mean(torch.stack(last_b, dim=0), dim=0)
+        self.model.register_buffer('last_k', last_k)
+        self.model.register_buffer('last_b', last_b)
+        self.model.register_buffer('grad_k', last_k)
+        self.model.register_buffer('grad_b', last_b)

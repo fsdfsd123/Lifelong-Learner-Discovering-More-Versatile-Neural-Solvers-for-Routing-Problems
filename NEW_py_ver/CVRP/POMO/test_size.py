@@ -23,7 +23,7 @@ sys.path.insert(0, "../..")  # for utils
 import logging
 from utils.utils import create_logger, copy_all_src
 
-from CVRPTester_size import CVRPTester as Tester
+from CVRPTester import CVRPTester as Tester
 
 
 ##########################################################################################
@@ -62,7 +62,7 @@ tester_params = {
     'aug_factor': 8,
     'aug_batch_size': 400,
     'test_data_load': {
-        'enable': True,
+        'enable': False,
         'filename': '../vrp100_test_seed1234.pt'
     },
 }

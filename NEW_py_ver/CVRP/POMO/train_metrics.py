@@ -35,6 +35,9 @@ env_params = {
     'type': 'ou',
     'model_path': 'models/model_continue.pt',
     'local_dir': '../cvrplib_npy/',
+    'mix_env_params': [{'problem_size': 100, 'pomo_size': 100, 'type': 'ou'},
+              {'problem_size': 100, 'pomo_size': 100, 'type': 'man'},
+              {'problem_size': 100, 'pomo_size': 100, 'type': 'max'}],
     'mix_num': 1
 
 }

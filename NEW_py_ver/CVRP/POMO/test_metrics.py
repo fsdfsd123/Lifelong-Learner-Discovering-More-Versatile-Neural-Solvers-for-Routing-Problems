@@ -62,7 +62,7 @@ tester_params = {
     'aug_factor': 8,
     'aug_batch_size': 400,
     'test_data_load': {
-        'enable': True,
+        'enable': False,
         'filename': '../vrp100_test_seed1234.pt'
     },
 }
