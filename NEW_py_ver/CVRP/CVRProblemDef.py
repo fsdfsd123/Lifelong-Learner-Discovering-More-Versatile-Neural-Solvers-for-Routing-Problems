@@ -47,14 +47,25 @@ def augment_xy_data_by_8_fold(xy_data):
 
 
 def get_local_problem(local_path):
-    data = np.load(local_path,allow_pickle=True).item()
+    data = np.load(local_path, allow_pickle=True).item()
+
+    node_xy = list(data['node'])
+    depot_xy = node_xy[0]
+    node_demand = list(data['demand'])
+    capacity = data['capacity']
     min_x = data['min_x']
     max_x = data['max_x']
-    data = list(data['data'])
-    current_len = len(data)
+    current_len = len(node_xy)
+    problem_size = current_len
+
     if current_len < 100:
-        for i in range(100-current_len):
-            data.append(data[0])
-    data = np.array(data)
-    print(data.shape)
-    return torch.tensor(data, dtype=torch.float).unsqueeze(0), len(data), min_x, max_x
+        for i in range(100 - current_len):
+            node_xy.append(node_xy[0])
+            node_demand.append(node_demand[0])
+    node_xy = np.array(node_xy)
+    depot_xy = np.array(depot_xy)
+    node_demand = np.array(node_demand)
+    depot_xy = torch.tensor(depot_xy, dtype=torch.float).unsqueeze(0).unsqueeze(0)
+    node_xy = torch.tensor(node_xy, dtype=torch.float).unsqueeze(0)
+    node_demand = torch.tensor(node_demand, dtype=torch.float).permute(1, 0) / capacity
+    return depot_xy, node_xy, node_demand, min_x, max_x

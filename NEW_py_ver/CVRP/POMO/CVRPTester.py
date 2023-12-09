@@ -71,7 +71,6 @@ class CVRPTester:
             print(local_path, score)
             all_path_scores.append(score)
         return local_paths, all_path_scores
-        # print(all_path_scores)
 
     def run(self):
         self.time_estimator.reset()
@@ -110,6 +109,7 @@ class CVRPTester:
                 self.logger.info(" *** Test Done *** ")
                 self.logger.info(" NO-AUG SCORE: {:.4f} ".format(score_AM.avg))
                 self.logger.info(" AUGMENTATION SCORE: {:.4f} ".format(aug_score_AM.avg))
+                return score_AM.avg
 
     def _test_one_batch(self, batch_size, local_path):
 
